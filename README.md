@@ -127,6 +127,72 @@ as a pure string tag, never as a code path:
 The same code paths and Meilisearch index are reused — `application` becomes
 a filter on the search index. No Python edits, no compose edits.
 
+## Phase 2 — Live-state linker
+
+`link_live_state.py` reads the existing `aqua_cortex` index, joins every
+chunk with live operational state, and writes the enriched document
+back. Phase 2 adds four fields to every chunk:
+
+| Field            | Type                | Source                                                       |
+|------------------|---------------------|--------------------------------------------------------------|
+| `linked_services`| `string[]`          | longest match of swarm service name in chunk text / doc_path |
+| `linked_cards`   | `string[]`          | `t_<hex>` regex + title-fragment similarity (>=2 tokens)     |
+| `linked_commits` | `string[]`          | explicit 7-char SHA mention + commit-subject similarity      |
+| `live_state`     | `object \| null`    | aqua-swarm `service ls` + `service ps` for the matched svc   |
+
+Live-state sources:
+
+- **aqua-swarm**: `docker --context aqua-swarm service ls` + `service ps`
+  over SSH. Service stack = prefix before first `_`; node = first
+  running task. Tolerates a failed `service ls` (returns empty index
+  rather than crashing the linker).
+- **Kanban DB**: `~/.hermes/kanban/boards/<board>/kanban.db` (default
+  `aquabutlers`). Cards touched in the last 30 days are indexed by
+  title tokens (`[a-z0-9]{3,}`, deduped, >=2-of-tokens threshold).
+  `t_<hex>` references are extracted verbatim from chunk text and
+  must match an existing card id.
+- **AquaButler-Server git log**: `git -C ~/AquaButler-Server log
+  --since='30 days ago' --pretty=format:'%H %s'`. SHA matching is
+  anchored on the **known** short/full SHA — arbitrary hex tokens
+  in prose won't spuriously link.
+
+### Run it
+
+```bash
+# Local / dev
+MEILI_KEY_FILE=/run/secrets/meili_master_key python3 link_live_state.py
+
+# With explicit fixtures (skips docker / git / sqlite3)
+AQUA_CORTEX_SWARM_FILE=/tmp/swarm.json \
+AQUA_CORTEX_KANBAN_DB=/tmp/kanban.db \
+AQUA_CORTEX_REPO=/tmp/repo \
+python3 link_live_state.py
+```
+
+The linker is idempotent: chunks with no field changes are skipped on
+subsequent runs. A Meilisearch update task is enqueued only when at
+least one of `linked_services` / `linked_cards` / `linked_commits` /
+`live_state` actually changed.
+
+### How it avoids the v1.12 partial-update gotcha
+
+Meilisearch v1.12 does NOT expose PATCH /documents or `merge=true` on
+POST /documents (those shipped in v1.13). The linker therefore reads
+back every chunk, builds the **full document** with the four
+Phase-2 fields overwritten, and POSTs it. The dense embedding is
+preserved server-side because `_vectors` is stripped from the body
+and the server treats the absent field as "don't touch".
+
+### Acceptance (verified live 2026-08-26)
+
+- `pytest tests/test_link_smoke.py tests/test_smoke_index.py` — both pass.
+- `link_live_state.py` against the live `aqua_cortex` index (2040 docs)
+  → **1785 chunks enriched (87.5%)**, far above the 50% threshold.
+- `curl ... /indexes/aqua_cortex/search?q=supabase_storage` returns
+  hits where `live_state.swarm_state == "1/1"` (matches the live
+  `docker --context aqua-swarm service ls | grep supabase_storage`)
+  AND `linked_cards` populated with `t_<hex>` ids.
+
 ## Embedding model — honest note
 
 The home-swarm llama.cpp server runs
