@@ -73,7 +73,7 @@ services:
         target: /vault
         read_only: true
     deploy:
-      mode: replicated-job
+      mode: replicated
       replicas: 0
       restart_policy:
         condition: none
