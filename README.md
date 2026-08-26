@@ -90,19 +90,58 @@ embedder is config-only — change `llama_model` and `embed_dim` in
 `aqua_cortex.toml`, re-run, and re-index. The Meilisearch embedder config
 will re-shape on the next `ensure_index()` call.
 
-## Local development
+## Deployment
+
+### Quick start (local)
 
 ```bash
-python3 -m venv .venv
-. .venv/bin/activate
 pip install httpx
 python3 index_obsidian.py --config aqua_cortex.toml
 ```
 
 The indexer reads the master key from `MEILI_KEY_FILE` (default
-`/run/secrets/meili_master_key`) or, failing that, from `AQUA_CORTEX_MEILI_KEY`.
-For local dev, set `MEILI_KEY_FILE=/path/to/secret` or pass the key as the
-env var.
+`/run/secrets/meili_master_key`) or, failing that, from
+`AQUA_CORTEX_MEILI_KEY`. For local dev, point it at a key file:
+
+```bash
+echo "$MEILI_KEY" > /tmp/meili.key
+MEILI_KEY_FILE=/tmp/meili.key python3 index_obsidian.py
+```
+
+### Swarm (home)
+
+```bash
+docker build -t registry.loc.wallacearizona.us/aqua_cortex_indexer:latest .
+docker push registry.loc.wallacearizona.us/aqua_cortex_indexer:latest
+
+docker --context home-swarm-manager stack deploy \
+  -c deploy/docker-stack.yml aqua_cortex
+docker --context home-swarm-manager stack deploy \
+  -c deploy/cron-aqua_cortex.yml aqua_cortex
+```
+
+The indexer service is declared in `deploy/docker-stack.yml` as a
+**replicated-job-mode** service (one replica, no restart) so the swarm
+scheduler is ready to run it on demand. The `deploy/cron-aqua_cortex.yml`
+stack adds the `crazymax/swarm-cronjob` scheduler that spawns the indexer
+task daily at 03:00 UTC.
+
+Both stacks mount the existing `meili_master_key` Docker secret at
+`/run/secrets/meili_master_key` (the indexer reads it on startup) and
+join the `traefik_proxy` overlay network so they can reach
+`docker-tools_meilisearch:7700` and `llamacpp_llama-server:18080` over
+the swarm overlay.
+
+The vault is bind-mounted read-only at `/vault` from the homelab NFS
+share (`/mnt/Stor1/appdata/obsidian/Obsidian Vault`).
+
+> **Heads-up:** cluster-wide image pulls from `registry.loc.wallacearizona.us`
+> require every swarm node to have valid registry credentials in
+> `/root/.docker/config.json` (or equivalent). On 2026-08-26 several nodes
+> were returning `401 invalid authorization credential` from the registry
+> during pull attempts, so cluster-wide deploys were failing. Run
+> `docker login registry.loc.wallacearizona.us` on each node, or coordinate
+> the auth fix via the registry stack separately.
 
 ## Repository
 

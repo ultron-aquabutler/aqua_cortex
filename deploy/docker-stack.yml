@@ -49,18 +49,9 @@ services:
         source: /mnt/Stor1/appdata/obsidian/Obsidian Vault
         target: /vault
         read_only: true
-    # We don't pin a placement constraint — the cron job may land on any
-    # node, and the bind mount must be present on all of them. If you add
-    # nodes without the NFS mount, pin the service here.
-    healthcheck:
-      # The container exits 0 on success; a non-zero exit means a failed
-      # index. swarm-cronjob records the exit code, so no live healthcheck
-      # is strictly needed, but a defensive one helps `docker service ps`.
-      test: ["CMD", "true"]
-      interval: 1h
-      timeout: 5s
-      retries: 1
     deploy:
+      mode: replicated-job
+      replicas: 1
       restart_policy:
         condition: none
       resources:
