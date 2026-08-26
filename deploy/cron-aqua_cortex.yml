@@ -1,0 +1,63 @@
+# swarm-cronjob schedule for aqua_cortex. Mounts the same meili_master_key
+# secret as the indexer service so cron can launch it with auth. See
+# https://github.com/crazy-max/swarm-cronjob for the schema; we declare a
+# stack-level service named `aqua_cortex_cron` that runs the existing
+# `aqua_cortex_indexer` image once a day at 03:00 UTC.
+---
+version: "3.8"
+
+networks:
+  traefik_proxy:
+    external: true
+    name: traefik_proxy
+
+secrets:
+  meili_master_key:
+    external: true
+    name: meili_master_key
+
+services:
+  aqua_cortex_cron:
+    image: crazymax/swarm-cronjob:latest
+    networks:
+      - traefik_proxy
+    environment:
+      TZ: "UTC"
+      LOG_LEVEL: "info"
+      # Schedule: 03:00 UTC every day.
+      SCHEDULE: "@daily"
+      SCHEDULE_OPTS: ""
+      # Run the indexer image, which exits 0 on a successful upsert.
+      CONTAINER_IMAGE: "registry.loc.wallacearizona.us/aqua_cortex_indexer:latest"
+      CONTAINER_NAME: "aqua_cortex_indexer"
+      # Override anything we want at runtime.
+      CONTAINER_ENV_LLAMA_URL: "http://llamacpp_llama-server:18080"
+      CONTAINER_ENV_LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
+      CONTAINER_ENV_MEILI_URL: "http://docker-tools_meilisearch:7700"
+      CONTAINER_ENV_MEILI_INDEX: "aqua_cortex"
+      CONTAINER_ENV_MEILI_KEY_FILE: "/run/secrets/meili_master_key"
+      CONTAINER_ENV_AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
+      # Mounts.
+      CONTAINER_VOLUMES: "/mnt/Stor1/appdata/obsidian/Obsidian Vault:/vault:ro"
+      # Secret file path inside the *cronjob* container (the secret value
+      # is passed through to the spawned container as a file mount).
+      CONTAINER_SECRETS: "meili_master_key"
+    secrets:
+      - source: meili_master_key
+        target: meili_master_key
+        uid: "0"
+        gid: "0"
+        mode: 0400
+    volumes:
+      # /var/run/docker.sock so swarm-cronjob can spin up the indexer task.
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+        read_only: true
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      resources:
+        limits:
+          memory: 128M

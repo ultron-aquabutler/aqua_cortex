@@ -1,0 +1,49 @@
+# aqua_cortex configuration. Defaults live in cortex/config.py; only override
+# what differs from the defaults here.
+#
+# Add a new application: copy this file, change `application`, point
+# `vault_paths` at the new docs, and run the indexer with --config pointing
+# at the new copy. No code changes.
+
+[indexer]
+
+# Application tag stored in every indexed document. Today the corpus is the
+# AquaButler pool deployment; flip this when indexing the next customer.
+application = "pool"
+
+# Vault roots to walk (recursively). Multiple paths supported. On the home
+# swarm the NFS mount is /mnt/Stor1/appdata/obsidian/Obsidian Vault/.
+vault_paths = [
+  "/mnt/Stor1/appdata/obsidian/Obsidian Vault/AquaButler",
+]
+
+# llama.cpp /v1/embeddings endpoint (OpenAI-compatible). On the home swarm
+# this is fronted by Traefik at https://llama.loc.wallacearizona.us/v1/embeddings.
+# Inside the swarm, the overlay VIP resolves as `llamacpp_llama-server:18080`.
+llama_url  = "http://llamacpp_llama-server:18080"
+llama_model = "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
+
+# Meilisearch on the home swarm (docker-tools stack). The master key is
+# mounted as a Docker secret at /run/secrets/meili_master_key.
+meili_url   = "http://docker-tools_meilisearch:7700"
+meili_index = "aqua_cortex"
+meili_key_file = "/run/secrets/meili_master_key"
+
+# Chunking. 350 / 75 keeps each chunk under llama.cpp's per-request token
+# limit (verified 500-token chunks triggered 500 "input too large" errors
+# against the home llama.cpp-rpc:v0.1.9 server — the markdown overhead
+# pushes real tokens above the configured batch size of 512).
+chunk_tokens = 350
+chunk_overlap = 75
+
+# Embedding throughput. Default to 1 because the home-swarm llama.cpp RPC
+# backend (llama.cpp-rpc:v0.1.9) crashes on certain large batched inputs
+# with "Remote RPC server crashed or returned malformed response" — raising
+# this risks a single bad batch killing the indexer run. Re-tune after
+# llama.cpp side fixes its RPC backend stability.
+embed_batch_size = 1
+
+# Output dimensionality. Must match what llama.cpp returns. The current
+# Qwen2.5-1.5B model returns 1536-dim (verified 2026-08-26 against the
+# live home-swarm endpoint). If we swap to nomic-embed-text this becomes 768.
+embed_dim = 1536

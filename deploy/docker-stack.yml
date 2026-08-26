@@ -1,0 +1,70 @@
+# aqua_cortex stack — deploy on the HOME swarm.
+#
+# The indexer is a one-shot job (cron-driven), but we keep it declared as a
+# Swarm service so the secret + overlay-network attachment stays consistent
+# with the rest of the docker-tools neighbours. swarm-cronjob creates a new
+# task on schedule and the indexer exits cleanly when done.
+#
+# Important — application-level wiring lives in aqua_cortex.toml, not here.
+# Add a new application by editing the [indexer] application= field (or by
+# passing AQUA_CORTEX_APPLICATION to the container), NOT by editing this
+# compose file.
+---
+version: "3.8"
+
+networks:
+  traefik_proxy:
+    external: true
+    name: traefik_proxy
+
+secrets:
+  meili_master_key:
+    external: true
+    name: meili_master_key
+
+services:
+  aqua_cortex_indexer:
+    image: registry.loc.wallacearizona.us/aqua_cortex_indexer:latest
+    networks:
+      - traefik_proxy
+    environment:
+      # Overlay-VIP endpoints. From inside the swarm the indexer reaches
+      # both services without going through Traefik.
+      LLAMA_URL: "http://llamacpp_llama-server:18080"
+      LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
+      MEILI_URL: "http://docker-tools_meilisearch:7700"
+      MEILI_INDEX: "aqua_cortex"
+      MEILI_KEY_FILE: "/run/secrets/meili_master_key"
+      # application is overridable here per-run; defaults to the TOML
+      # value (currently "pool") when unset.
+      AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
+    secrets:
+      - meili_master_key
+    volumes:
+      # RO bind-mount of the Obsidian vault. The vault is the homelab NFS
+      # share at /mnt/Stor1/appdata/obsidian/Obsidian Vault/ on the manager
+      # node; mount it on every node where the indexer might run (cron can
+      # land on any worker).
+      - type: bind
+        source: /mnt/Stor1/appdata/obsidian/Obsidian Vault
+        target: /vault
+        read_only: true
+    # We don't pin a placement constraint — the cron job may land on any
+    # node, and the bind mount must be present on all of them. If you add
+    # nodes without the NFS mount, pin the service here.
+    healthcheck:
+      # The container exits 0 on success; a non-zero exit means a failed
+      # index. swarm-cronjob records the exit code, so no live healthcheck
+      # is strictly needed, but a defensive one helps `docker service ps`.
+      test: ["CMD", "true"]
+      interval: 1h
+      timeout: 5s
+      retries: 1
+    deploy:
+      restart_policy:
+        condition: none
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 128M
