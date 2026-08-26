@@ -116,15 +116,31 @@ docker push registry.loc.wallacearizona.us/aqua_cortex_indexer:latest
 
 docker --context home-swarm-manager stack deploy \
   -c deploy/docker-stack.yml aqua_cortex
-docker --context home-swarm-manager stack deploy \
-  -c deploy/cron-aqua_cortex.yml aqua_cortex
 ```
 
-The indexer service is declared in `deploy/docker-stack.yml` as a
-**replicated-job-mode** service (one replica, no restart) so the swarm
-scheduler is ready to run it on demand. The `deploy/cron-aqua_cortex.yml`
-stack adds the `crazymax/swarm-cronjob` scheduler that spawns the indexer
-task daily at 03:00 UTC.
+The indexer service is declared in `deploy/docker-stack.yml` with
+`replicas: 0` and the `swarm.cronjob.*` schedule labels attached to the
+service. The cluster-wide `docker-tools_cronjob` daemon (crazymax/swarm-cronjob
+in the `docker-tools` stack, running on ironman) discovers those labels and
+scales the service 0 -> 1 at the scheduled time, then back to 0 when the
+task exits.
+
+`deploy/cron-aqua_cortex.yml` exists as documentation + escape hatch — it
+declares the same scheduler container as a standalone service, but deploying
+it creates an IPAM collision with the existing `docker-tools_cronjob`
+daemon (verified live 2026-08-26: `invalid pool request: Pool overlaps with
+other one on this address space`). The intended production path is to
+**not** deploy that file; rely on `docker-tools_cronjob`.
+
+**Schedule:** `swarm.cronjob.schedule=@daily` + `schedule-timezone=UTC`.
+Note that the `docker-tools_cronjob` daemon runs with its own `TZ=America/Phoenix`
+env and does NOT honour the per-service `schedule-timezone` label, so
+the actual fire time is **midnight America/Phoenix (UTC-7) = 07:00 UTC**
+on the schedule date — not the labelled 03:00 UTC. If you need a strict
+03:00 UTC trigger, change the daemon's TZ env in the docker-tools stack,
+or override the schedule in `deploy/docker-stack.yml` to a specific
+UTC cron expression that maps to your desired hour in MST
+(e.g. `0 0 20 * * *` = 20:00 UTC = 13:00 MST).
 
 Both stacks mount the existing `meili_master_key` Docker secret at
 `/run/secrets/meili_master_key` (the indexer reads it on startup) and

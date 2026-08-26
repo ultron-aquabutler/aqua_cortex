@@ -1,18 +1,17 @@
 # aqua_cortex stack — deploy on the HOME swarm.
 #
-# This file declares the `aqua_cortex_indexer` Swarm service. It runs as a
-# replicated-job (replicas: 0) so no task is created until something scales
-# it up. The schedule trigger lives in `deploy/cron-aqua_cortex.yml`, which
-# is a separate stack (`aqua_cortex`) that targets the same service name
-# and adds the `swarm.cronjob.*` labels consumed by the cluster-wide
-# `docker-tools_cronjob` daemon (crazymax/swarm-cronjob) running in the
-# `docker-tools` stack.
+# This file declares the `aqua_cortex_indexer` Swarm service with the
+# `swarm.cronjob.*` schedule labels attached. The cluster-wide
+# `docker-tools_cronjob` daemon (crazymax/swarm-cronjob in the docker-tools
+# stack, running on ironman) discovers those labels and scales the
+# service 0 -> 1 at the scheduled time, then back to 0 when the task exits.
 #
-# Why two files instead of one stack with both services? The cron-trigger
-# pattern (replicas: 0 + swarm.cronjob.* labels) and the ad-hoc run pattern
-# (`docker service scale aqua_cortex_aqua_cortex_indexer=1`) are mutually
-# exclusive. Keeping them in separate stack files lets each be deployed and
-# torn down independently without touching the other.
+# We intentionally do NOT declare a second `aqua_cortex_cron` service here
+# — the docker-tools_cronjob daemon already covers it, and a second
+# swarm-cronjob container on the same `traefik_proxy` overlay fails with
+# an IPAM pool-collision error (observed live 2026-08-26). The standalone
+# scheduler option is preserved in `deploy/cron-aqua_cortex.yml` as an
+# escape hatch for swarms that don't have docker-tools_cronjob.
 #
 # Important — application-level wiring lives in aqua_cortex.toml, not here.
 # Add a new application by editing the [indexer] application= field (or by
