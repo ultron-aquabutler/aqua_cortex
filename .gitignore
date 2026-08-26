@@ -1,6 +1,10 @@
 __pycache__/
 *.pyc
 *.pyo
-tests/fixtures/aqua_cortex.test.toml
+*.egg-info/
+build/
+dist/
+.pytest_cache/
 .venv/
 .env
+tests/fixtures/aqua_cortex.test.toml
