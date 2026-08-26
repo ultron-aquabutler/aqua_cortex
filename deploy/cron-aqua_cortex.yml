@@ -1,8 +1,20 @@
-# swarm-cronjob schedule for aqua_cortex. Mounts the same meili_master_key
-# secret as the indexer service so cron can launch it with auth. See
-# https://github.com/crazy-max/swarm-cronjob for the schema; we declare a
-# stack-level service named `aqua_cortex_cron` that runs the existing
-# `aqua_cortex_indexer` image once a day at 03:00 UTC.
+# aqua_cortex cron schedule — uses the cluster-wide `docker-tools_cronjob`
+# daemon (crazymax/swarm-cronjob in the docker-tools stack) to trigger the
+# `aqua_cortex_indexer` service once a day at 03:00 UTC.
+#
+# Pattern: declare the indexer service with `swarm.cronjob.enable=true`
+# + `swarm.cronjob.schedule=@daily` + `swarm.cronjob.schedule-timezone=UTC`.
+# The existing docker-tools_cronjob daemon (running on ironman) discovers
+# these labels and scales the service from 0 -> 1 at the scheduled time,
+# then back to 0 once the task exits.
+#
+# Deploy:
+#   docker --context home-swarm-manager stack deploy \
+#     -c deploy/cron-aqua_cortex.yml aqua_cortex
+#
+# Networking note (verified live 2026-08-26): both Meilisearch and llama.cpp
+# are reached via their Traefik-fronted hostnames, NOT overlay VIPs. See
+# docker-stack.yml for the full justification.
 ---
 version: "3.8"
 
@@ -17,47 +29,41 @@ secrets:
     name: meili_master_key
 
 services:
-  aqua_cortex_cron:
-    image: crazymax/swarm-cronjob:latest
+  aqua_cortex_indexer:
+    image: registry.loc.wallacearizona.us/aqua_cortex_indexer:latest
     networks:
       - traefik_proxy
     environment:
-      TZ: "UTC"
-      LOG_LEVEL: "info"
-      # Schedule: 03:00 UTC every day.
-      SCHEDULE: "@daily"
-      SCHEDULE_OPTS: ""
-      # Run the indexer image, which exits 0 on a successful upsert.
-      CONTAINER_IMAGE: "registry.loc.wallacearizona.us/aqua_cortex_indexer:latest"
-      CONTAINER_NAME: "aqua_cortex_indexer"
-      # Override anything we want at runtime.
-      CONTAINER_ENV_LLAMA_URL: "http://llamacpp_llama-server:18080"
-      CONTAINER_ENV_LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
-      CONTAINER_ENV_MEILI_URL: "http://docker-tools_meilisearch:7700"
-      CONTAINER_ENV_MEILI_INDEX: "aqua_cortex"
-      CONTAINER_ENV_MEILI_KEY_FILE: "/run/secrets/meili_master_key"
-      CONTAINER_ENV_AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
-      # Mounts.
-      CONTAINER_VOLUMES: "/mnt/Stor1/appdata/obsidian/Obsidian Vault:/vault:ro"
-      # Secret file path inside the *cronjob* container (the secret value
-      # is passed through to the spawned container as a file mount).
-      CONTAINER_SECRETS: "meili_master_key"
+      LLAMA_URL: "https://llama.loc.wallacearizona.us"
+      LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
+      MEILI_URL: "https://meili.loc.wallacearizona.us"
+      MEILI_INDEX: "aqua_cortex"
+      MEILI_KEY_FILE: "/run/secrets/meili_master_key"
+      AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
     secrets:
-      - source: meili_master_key
-        target: meili_master_key
-        uid: "0"
-        gid: "0"
-        mode: 0400
+      - meili_master_key
     volumes:
-      # /var/run/docker.sock so swarm-cronjob can spin up the indexer task.
       - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
+        source: /mnt/Stor1/appdata/obsidian/Obsidian Vault
+        target: /vault
         read_only: true
     deploy:
+      mode: replicated
+      replicas: 0
+      restart_policy:
+        condition: none
       placement:
+        # Pin to ironman — that's the node where the Obsidian NFS vault
+        # bind-mount lives, and where docker-tools_cronjob also runs.
         constraints:
-          - node.role == manager
+          - node.labels.hostname == ironman
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=@daily"
+        - "swarm.cronjob.schedule-timezone=UTC"
+        - "swarm.cronjob.skip-running=false"
       resources:
         limits:
+          memory: 512M
+        reservations:
           memory: 128M

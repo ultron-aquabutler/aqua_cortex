@@ -17,10 +17,12 @@ vault_paths = [
   "/mnt/Stor1/appdata/obsidian/Obsidian Vault/AquaButler",
 ]
 
-# llama.cpp /v1/embeddings endpoint (OpenAI-compatible). On the home swarm
-# this is fronted by Traefik at https://llama.loc.wallacearizona.us/v1/embeddings.
-# Inside the swarm, the overlay VIP resolves as `llamacpp_llama-server:18080`.
-llama_url  = "http://llamacpp_llama-server:18080"
+# llama.cpp /v1/embeddings endpoint (OpenAI-compatible). Default to the
+# Traefik-fronted public hostname — that works from any host (local runs on
+# this manager, swarm container, CI) without needing overlay-network access.
+# Inside a host that is attached to the llamacpp overlay you can override to
+# the overlay VIP `http://llamacpp_llama-server:18080` for lower latency.
+llama_url  = "https://llama.loc.wallacearizona.us"
 llama_model = "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
 
 # Meilisearch on the home swarm (docker-tools stack). The master key is

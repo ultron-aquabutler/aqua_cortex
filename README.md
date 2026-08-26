@@ -128,20 +128,21 @@ task daily at 03:00 UTC.
 
 Both stacks mount the existing `meili_master_key` Docker secret at
 `/run/secrets/meili_master_key` (the indexer reads it on startup) and
-join the `traefik_proxy` overlay network so they can reach
-`docker-tools_meilisearch:7700` and `llamacpp_llama-server:18080` over
-the swarm overlay.
+join the `traefik_proxy` overlay network. Meilisearch is on that same
+overlay (DNS alias `docker-tools_meilisearch` works directly), while
+llama.cpp lives on a separate `arr-servers` overlay — for that reason
+the indexer is pointed at the Traefik-fronted public hostname
+`https://llama.loc.wallacearizona.us` rather than the in-overlay VIP.
 
 The vault is bind-mounted read-only at `/vault` from the homelab NFS
 share (`/mnt/Stor1/appdata/obsidian/Obsidian Vault`).
 
-> **Heads-up:** cluster-wide image pulls from `registry.loc.wallacearizona.us`
-> require every swarm node to have valid registry credentials in
-> `/root/.docker/config.json` (or equivalent). On 2026-08-26 several nodes
-> were returning `401 invalid authorization credential` from the registry
-> during pull attempts, so cluster-wide deploys were failing. Run
-> `docker login registry.loc.wallacearizona.us` on each node, or coordinate
-> the auth fix via the registry stack separately.
+> **Historical note:** on 2026-08-26 cluster-wide image pulls from
+> `registry.loc.wallacearizona.us` were briefly returning
+> `401 invalid authorization credential` from non-hulk nodes; the auth
+> config was fixed before this README was updated. If you hit a fresh
+> auth error, run `docker login registry.loc.wallacearizona.us` on the
+> affected node.
 
 ## Repository
 

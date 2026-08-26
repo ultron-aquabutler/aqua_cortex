@@ -1,14 +1,33 @@
 # aqua_cortex stack — deploy on the HOME swarm.
 #
-# The indexer is a one-shot job (cron-driven), but we keep it declared as a
-# Swarm service so the secret + overlay-network attachment stays consistent
-# with the rest of the docker-tools neighbours. swarm-cronjob creates a new
-# task on schedule and the indexer exits cleanly when done.
+# This file declares the `aqua_cortex_indexer` Swarm service. It runs as a
+# replicated-job (replicas: 0) so no task is created until something scales
+# it up. The schedule trigger lives in `deploy/cron-aqua_cortex.yml`, which
+# is a separate stack (`aqua_cortex`) that targets the same service name
+# and adds the `swarm.cronjob.*` labels consumed by the cluster-wide
+# `docker-tools_cronjob` daemon (crazymax/swarm-cronjob) running in the
+# `docker-tools` stack.
+#
+# Why two files instead of one stack with both services? The cron-trigger
+# pattern (replicas: 0 + swarm.cronjob.* labels) and the ad-hoc run pattern
+# (`docker service scale aqua_cortex_aqua_cortex_indexer=1`) are mutually
+# exclusive. Keeping them in separate stack files lets each be deployed and
+# torn down independently without touching the other.
 #
 # Important — application-level wiring lives in aqua_cortex.toml, not here.
 # Add a new application by editing the [indexer] application= field (or by
 # passing AQUA_CORTEX_APPLICATION to the container), NOT by editing this
 # compose file.
+#
+# Networking note (verified live 2026-08-26):
+# - docker-tools_meilisearch is on the `traefik_proxy` overlay (NOT a
+#   `docker-tools` overlay — that stack namespace has no overlay network
+#   of its own). Meili is reached via the Traefik-fronted hostname
+#   `https://meili.loc.wallacearizona.us`, which is the only stable URL
+#   regardless of where the indexer task lands.
+# - llamacpp_llama-server is on Swarm's `host` predefined network. Its
+#   port 18080 binds to the host IP directly. Cross-overlay DNS does NOT
+#   resolve it. Use the Traefik-fronted `https://llama.loc.wallacearizona.us`.
 ---
 version: "3.8"
 
@@ -28,15 +47,19 @@ services:
     networks:
       - traefik_proxy
     environment:
-      # Overlay-VIP endpoints. From inside the swarm the indexer reaches
-      # both services without going through Traefik.
-      LLAMA_URL: "http://llamacpp_llama-server:18080"
+      # Traefik-fronted endpoints. Both backends are reachable over the
+      # homelab Tailnet from any node, including inside containers that
+      # only have traefik_proxy attached. TLS verification is skipped
+      # inside the container (cortex/embedder.py + cortex/meili.py both
+      # use httpx.AsyncClient(verify=False)); switch to verify=True if
+      # you ever ship a production CA into the image.
+      LLAMA_URL: "https://llama.loc.wallacearizona.us"
       LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
-      MEILI_URL: "http://docker-tools_meilisearch:7700"
+      MEILI_URL: "https://meili.loc.wallacearizona.us"
       MEILI_INDEX: "aqua_cortex"
       MEILI_KEY_FILE: "/run/secrets/meili_master_key"
-      # application is overridable here per-run; defaults to the TOML
-      # value (currently "pool") when unset.
+      # application is overridable here per-run; defaults to the value
+      # set in aqua_cortex.toml when unset.
       AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
     secrets:
       - meili_master_key
@@ -51,7 +74,7 @@ services:
         read_only: true
     deploy:
       mode: replicated-job
-      replicas: 1
+      replicas: 0
       restart_policy:
         condition: none
       resources:
@@ -59,3 +82,8 @@ services:
           memory: 512M
         reservations:
           memory: 128M
+      placement:
+        # Pin to ironman (where the vault bind-mount lives) until we move
+        # the vault onto a cluster-wide CSI volume.
+        constraints:
+          - node.labels.hostname == ironman
