@@ -30,18 +30,84 @@ and a CLI.
 ┌──────────────────────────────────────────────┐
 │ Meilisearch (docker-tools stack)             │
 │ index "aqua_cortex"  +  1536-dim embedder    │
+└──────────────┬───────────────────────────────┘
+               │ GET /documents (paginated)
+               ▼
+┌──────────────────────────────────────────────┐
+│ link_live_state.py  (Phase 2)                │
+│   ├─ cortex.swarm_state  (docker context     │
+│   │   "aqua-swarm" service ls + service ps)  │
+│   ├─ cortex.kanban_state (sqlite3 title +    │
+│   │   t_<hex> index, last 30 days)           │
+│   └─ cortex.git_state    (git log -since     │
+│       30d, SHA + token index)                │
 └──────────────────────────────────────────────┘
 ```
 
 - **Where it runs:** HOME swarm only. The cortex never deploys to Aqua —
   Aqua is app-layer. (See `AquaButler-Server/AGENTS.md`.)
 - **What it talks to:** the existing `docker-tools_meilisearch` service
-  (already 4GB after the Phase-1 OOM bump) and the existing
-  `llamacpp_llama-server` (Qwen2.5-1.5B-Instruct-Q4_K_M). No new deploys.
+  (already 4GB after the Phase-1 OOM bump), the existing
+  `llamacpp_llama-server` (Qwen2.5-1.5B-Instruct-Q4_K_M), the local
+  kanban SQLite (`~/.hermes/kanban/boards/<board>/kanban.db`), the
+  AquaButler-Server git repo at `~/AquaButler-Server`, and the aqua-swarm
+  Docker context. No new deploys.
 - **Credentials:** the existing `meili_master_key` Docker secret is the only
   auth. Read at `/run/secrets/meili_master_key`. No new credentials.
 - **Schedule:** `deploy/cron-aqua_cortex.yml` runs the indexer once a day
-  at 03:00 UTC via swarm-cronjob.
+  at 03:00 UTC via swarm-cronjob; the linker runs immediately after in the
+  same task slot.
+
+## Phase 2 — Live-state linker
+
+After `index_obsidian.py` has populated the `aqua_cortex` index, run:
+
+```bash
+python3 link_live_state.py
+```
+
+The linker reads every chunk back out of Meilisearch via the
+`/indexes/aqua_cortex/documents` endpoint (NOT `/search` — the latter is
+capped at Meili's `pagination.maxTotalHits=1000` default, and our corpus
+is already past that), joins each one with three live-state sources, and
+ships partial updates back via `POST /indexes/aqua_cortex/documents?merge=true`.
+
+### Linked fields written to every chunk
+
+- `linked_services: string[]` — every aqua-swarm service whose name OR
+  stack prefix appears as a substring in the chunk text or `doc_path`.
+  e.g. a chunk that mentions `mosquitto_broker-aqua1` AND talks about the
+  `supabase` stack will carry `["mosquitto_broker-aqua1", "supabase_*"]`.
+- `linked_cards: string[]` — kanban cards in the last 30 days whose title
+  shares ≥ 2 tokens with the chunk text, OR whose `t_<hex>` id is
+  explicitly mentioned in the chunk. Pulled from
+  `~/.hermes/kanban/boards/<board>/kanban.db`.
+- `linked_commits: string[]` — AquaButler-Server commits in the last 30
+  days whose message shares tokens with the chunk text, OR whose 7-char
+  SHA is mentioned in the chunk. Pulled via `git log --since='30 days ago'`.
+- `live_state: {service, swarm_state, stack, node, checked_at} | null` —
+  the single most-specific running service from `linked_services`. Used
+  for the Grafana / CLI "what's deployed right now?" view in Phase 3.
+
+### Env overrides (linker-specific)
+
+```bash
+AQUA_CORTEX_BOARD=aquabutlers            # kanban board slug
+AQUA_CORTEX_REPO=~/AquaButler-Server     # git repo path
+AQUA_CORTEX_SWARM=aqua-swarm             # docker context name
+AQUA_CORTEX_SWARM_FILE=/path/to.json    # skip docker, load fixture
+AQUA_CORTEX_KANBAN_DB=/path/to/kanban.db # override kanban DB path
+```
+
+### Acceptance (verified 2026-08-26)
+
+Running `python3 link_live_state.py` against the live home-swarm Meili
+instance (2040 docs) reports `link_pct: 79.7%` (≥ 50% threshold). The
+acceptance query
+`POST /indexes/aqua_cortex/search {"q":"supabase_storage","limit":3}`
+returns documents where `live_state.swarm_state="1/1"` (matching
+`docker --context aqua-swarm service ls`) AND `linked_cards` carries a
+non-empty list of `t_<hex>` references.
 
 ## Adding a new application
 

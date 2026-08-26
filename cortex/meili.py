@@ -57,12 +57,20 @@ class MeiliClient:
                     "section",
                     "linked_services",
                     "linked_cards",
+                    "linked_commits",
+                    "live_state.service",
+                    "live_state.stack",
                 ],
                 "filterableAttributes": [
                     "application",
                     "source",
                     "linked_services",
                     "linked_cards",
+                    "linked_commits",
+                    "live_state.service",
+                    "live_state.swarm_state",
+                    "live_state.stack",
+                    "live_state.node",
                     "indexed_at",
                 ],
                 "sortableAttributes": ["indexed_at", "chunk_index"],
@@ -93,6 +101,44 @@ class MeiliClient:
             r = client.post(
                 f"{base}/indexes/{self.index}/documents",
                 json=docs,
+                headers=self._headers(),
+            )
+            r.raise_for_status()
+
+    def upsert_partial_documents(self, docs: list[dict]) -> None:
+        """Update a batch of documents, preserving the dense embedding.
+
+        Meilisearch v1.12 does NOT support partial-update endpoints
+        (PATCH and POST with `merge=true` both 405/400 respectively —
+        the merge parameter shipped in v1.13). We work around this by:
+
+          1. POSTing the full document with `_vectors` stripped.
+          2. Meilisearch preserves the existing embedding server-side
+             because the request body never claims to update it
+             (verified live 2026-08-26 against `aqua_cortex` index).
+
+        This means each input `doc` MUST be a complete document (every
+        field Meilisearch has on the original). The caller (the linker)
+        builds these by reading back the existing hit and overlaying
+        its new `linked_*` / `live_state` fields.
+
+        Setting a field to `null` in the body REMOVES that field on
+        the server — used by the linker to clear stale `live_state`
+        when a service disappears from the swarm.
+        """
+        if not docs:
+            return
+        # Strip _vectors from the body — server-side preservation handles
+        # the embedding; sending it would just waste bandwidth.
+        payload: list[dict] = []
+        for d in docs:
+            cleaned = {k: v for k, v in d.items() if k != "_vectors"}
+            payload.append(cleaned)
+        base = self.base_url.rstrip("/")
+        with httpx.Client(timeout=60.0) as client:
+            r = client.post(
+                f"{base}/indexes/{self.index}/documents",
+                json=payload,
                 headers=self._headers(),
             )
             r.raise_for_status()
