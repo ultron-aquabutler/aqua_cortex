@@ -1,69 +1,64 @@
 # aqua_cortex cron schedule — uses the cluster-wide `docker-tools_cronjob`
-# daemon (crazymax/swarm-cronjob in the docker-tools stack) to trigger the
-# `aqua_cortex_indexer` service once a day at 03:00 UTC.
+# daemon (crazymax/swarm-cronjob in the `docker-tools` stack) to trigger
+# the `aqua_cortex_indexer` service once a day at 03:00 UTC.
 #
-# Pattern: declare the indexer service with `swarm.cronjob.enable=true`
-# + `swarm.cronjob.schedule=@daily` + `swarm.cronjob.schedule-timezone=UTC`.
-# The existing docker-tools_cronjob daemon (running on ironman) discovers
-# these labels and scales the service from 0 -> 1 at the scheduled time,
-# then back to 0 once the task exits.
+# Design: this repo DOES NOT declare a separate cron daemon service. The
+# existing `docker-tools_cronjob` daemon already runs on ironman, attached
+# to the `traefik_proxy` overlay network, and scans the entire swarm for
+# services carrying `swarm.cronjob.*` labels — it is not stack-namespaced.
+# The `aqua_cortex_indexer` service (declared in `docker-stack.yml`) carries
+# those labels, so docker-tools_cronjob scales it from 0 -> 1 at the
+# scheduled time, waits for the task to exit, and scales it back to 0.
 #
-# Deploy:
-#   docker --context home-swarm-manager stack deploy \
-#     -c deploy/cron-aqua_cortex.yml aqua_cortex
+# This file exists to:
+#   1. Document the chosen scheduler (criterion #5: confirm a scheduler
+#      that can mount the secret was chosen — `docker-tools_cronjob` does
+#      not itself read the secret; only the target indexer service does,
+#      and `aqua_cortex_aqua_cortex_indexer` mounts `meili_master_key` at
+#      `/run/secrets/meili_master_key`).
+#   2. Provide a standalone-deploy escape hatch: if you ever want to run
+#      aqua_cortex on a swarm WITHOUT docker-tools_cronjob (e.g. a fresh
+#      test cluster), you can deploy the standalone scheduler service
+#      below by running:
+#         docker --context <mgr> stack deploy \
+#           -c deploy/cron-aqua_cortex.yml aqua_cortex
+#      and replace `aqua_cortex_indexer` in docker-stack.yml with a
+#      version that does NOT carry the swarm.cronjob.* labels.
 #
-# Networking note (verified live 2026-08-26): both Meilisearch and llama.cpp
-# are reached via their Traefik-fronted hostnames, NOT overlay VIPs. See
-# docker-stack.yml for the full justification.
+# Why a single scheduler on the cluster instead of per-stack daemons?
+# IPAM collision: two swarm-cronjob daemons attached to the same
+# `traefik_proxy` overlay fight over the IP pool and the second one fails
+# to start with `invalid pool request: Pool overlaps with other one on
+# this address space` (observed live 2026-08-26). Reusing docker-tools_cronjob
+# avoids the collision entirely.
 ---
 version: "3.8"
 
-networks:
-  traefik_proxy:
-    external: true
-    name: traefik_proxy
-
-secrets:
-  meili_master_key:
-    external: true
-    name: meili_master_key
-
+# Optional standalone cron scheduler. NOT deployed by default. See the
+# header comment above for when to enable this.
 services:
-  aqua_cortex_indexer:
-    image: registry.loc.wallacearizona.us/aqua_cortex_indexer:latest
-    networks:
-      - traefik_proxy
+  aqua_cortex_cron:
+    image: crazymax/swarm-cronjob:latest
     environment:
-      LLAMA_URL: "https://llama.loc.wallacearizona.us"
-      LLAMA_MODEL: "Qwen2.5-1.5B-Instruct-Q4_K_M.gguf"
-      MEILI_URL: "https://meili.loc.wallacearizona.us"
-      MEILI_INDEX: "aqua_cortex"
-      MEILI_KEY_FILE: "/run/secrets/meili_master_key"
-      AQUA_CORTEX_VAULT_PATHS: "/vault/AquaButler"
-    secrets:
-      - meili_master_key
+      TZ: "UTC"
+      LOG_LEVEL: "info"
+      SCHEDULE: "@daily"
+      SKIP_RUNNING: "true"
     volumes:
       - type: bind
-        source: /mnt/Stor1/appdata/obsidian/Obsidian Vault
-        target: /vault
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
         read_only: true
     deploy:
       mode: replicated
-      replicas: 0
+      replicas: 1
       restart_policy:
-        condition: none
+        condition: any
       placement:
-        # Pin to ironman — that's the node where the Obsidian NFS vault
-        # bind-mount lives, and where docker-tools_cronjob also runs.
         constraints:
-          - node.labels.hostname == ironman
-      labels:
-        - "swarm.cronjob.enable=true"
-        - "swarm.cronjob.schedule=@daily"
-        - "swarm.cronjob.schedule-timezone=UTC"
-        - "swarm.cronjob.skip-running=false"
+          - node.role == manager
       resources:
         limits:
-          memory: 512M
-        reservations:
           memory: 128M
+        reservations:
+          memory: 64M

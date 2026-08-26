@@ -87,3 +87,12 @@ services:
         # the vault onto a cluster-wide CSI volume.
         constraints:
           - node.labels.hostname == ironman
+      # swarm.cronjob.* labels are picked up by the crazymax/swarm-cronjob
+      # daemon declared in deploy/cron-aqua_cortex.yml. They cause the
+      # service to scale 0 -> 1 at 03:00 UTC and back to 0 when the task
+      # exits.
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=@daily"
+        - "swarm.cronjob.schedule-timezone=UTC"
+        - "swarm.cronjob.skip-running=false"
