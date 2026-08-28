@@ -1,0 +1,243 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_AQUA_CORTEX_JSON",
+      "label": "aqua_cortex (JSON API)",
+      "description": "JSON API datasource pointing at the aqua_cortex snapshot endpoint. Install marcusolsson-json-datasource if missing: docker exec <grafana> grafana-cli plugins install marcusolsson-json-datasource",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": ">=1.3.0"
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.0.0"
+    }
+  ],
+  "annotations": {
+    "list": []
+  },
+  "description": "aqua_cortex — joined view of AquaButler docs, kanban cards, live swarm state, and git history. Requires the aqua_cortex snapshot endpoint (see hermes-plugin/hermes_aqua_cortex.py snapshot).",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "aqua_cortex — Phase 3",
+      "collapsed": false,
+      "gridPos": {"h": 1, "w": 24, "x": 0, "y": 0},
+      "panels": []
+    },
+    {
+      "id": 2,
+      "title": "Doc vs Running",
+      "description": "Which services are documented AND running, only documented, only running. Sort: missing first.",
+      "type": "table",
+      "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+      "gridPos": {"h": 12, "w": 8, "x": 0, "y": 1},
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "running", "desc": false}]
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left",
+            "cellOptions": {
+              "type": "color-background"
+            }
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "running"},
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"color": "red", "value": null},
+                    {"color": "green", "value": 1}
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {"type": "value", "options": {"0": {"text": "✗", "color": "red"}, "1": {"text": "✓", "color": "green"}}}
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {"id": "byName", "options": "documented"},
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {"type": "value", "options": {"0": {"text": "✗", "color": "red"}, "1": {"text": "✓", "color": "green"}}}
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+          "refId": "doc-vs-running",
+          "urlPath": "/snapshot",
+          "method": "GET",
+          "path": "doc_vs_running",
+          "fields": [
+            {"name": "service", "jsonPath": "$.service", "type": "string"},
+            {"name": "documented", "jsonPath": "$.documented", "type": "boolean"},
+            {"name": "running", "jsonPath": "$.running", "type": "boolean"},
+            {"name": "swarm_state", "jsonPath": "$.swarm_state", "type": "string"},
+            {"name": "stack", "jsonPath": "$.stack", "type": "string"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Doc Freshness",
+      "description": "How old is each doc? Cells turn red when oldest_doc_indexed_at > 30 days.",
+      "type": "table",
+      "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+      "gridPos": {"h": 12, "w": 8, "x": 8, "y": 1},
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "oldest_doc_indexed_at", "desc": false}]
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "left"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {"id": "byName", "options": "oldest_doc_indexed_at"},
+            "properties": [
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background",
+                  "mode": "basic"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"color": "green", "value": null},
+                    {"color": "yellow", "value": 1700000000},
+                    {"color": "red", "value": 1735689600}
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+          "refId": "doc-freshness",
+          "urlPath": "/snapshot",
+          "method": "GET",
+          "path": "doc_freshness",
+          "fields": [
+            {"name": "service", "jsonPath": "$.service", "type": "string"},
+            {"name": "doc_path", "jsonPath": "$.doc_path", "type": "string"},
+            {"name": "doc_title", "jsonPath": "$.doc_title", "type": "string"},
+            {"name": "oldest_doc_indexed_at", "jsonPath": "$.oldest_doc_indexed_at", "type": "string"},
+            {"name": "last_compose_change", "jsonPath": "$.last_compose_change", "type": "string"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Recent Activity",
+      "description": "Last 50 indexed events across obsidian / kanban / swarm / git sources.",
+      "type": "table",
+      "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+      "gridPos": {"h": 12, "w": 8, "x": 16, "y": 1},
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "when", "desc": true}]
+      },
+      "targets": [
+        {
+          "datasource": {"type": "marcusolsson-json-datasource", "uid": "${DS_AQUA_CORTEX_JSON}"},
+          "refId": "recent-activity",
+          "urlPath": "/snapshot",
+          "method": "GET",
+          "path": "recent_activity",
+          "fields": [
+            {"name": "when", "jsonPath": "$.when", "type": "string"},
+            {"name": "source", "jsonPath": "$.source", "type": "string"},
+            {"name": "service", "jsonPath": "$.service", "type": "string"},
+            {"name": "summary", "jsonPath": "$.summary", "type": "string"},
+            {"name": "doc_path", "jsonPath": "$.doc_path", "type": "string"}
+          ]
+        }
+      ]
+    }
+  ],
+  "refresh": "30m",
+  "schemaVersion": 39,
+  "tags": ["aqua_cortex", "aquabutler"],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-30d",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "aqua_cortex",
+  "uid": "aqua-cortex",
+  "version": 1,
+  "weekStart": ""
+}

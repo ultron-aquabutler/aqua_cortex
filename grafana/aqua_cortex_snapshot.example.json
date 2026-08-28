@@ -1,0 +1,1289 @@
+{
+  "counts": {
+    "distinct_doc_paths": 74,
+    "distinct_services": 58,
+    "documents": 2061
+  },
+  "doc_freshness": [
+    {
+      "doc_path": "Alerting/index.md",
+      "doc_title": "Alerting & Notification System",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T15:11:52+00:00",
+      "service": "Alerting/index.md"
+    },
+    {
+      "doc_path": "Aqua Swarm/Storage.md",
+      "doc_title": "Aqua Swarm \u2014 Storage Architecture",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:45:13+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Aqua Swarm/index.md",
+      "doc_title": "Aqua Docker Swarm",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:45:27+00:00",
+      "service": "Aqua Swarm/index.md"
+    },
+    {
+      "doc_path": "Aqua Swarm/runtime-audit-2026-07-29.md",
+      "doc_title": "Aqua Swarm Runtime Audit \u2014 2026-07-29",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:45:37+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Aqua Traefik/index.md",
+      "doc_title": "Aqua Traefik & Cloudflared Tunnel",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:45:46+00:00",
+      "service": "traefik-aqua_proxy"
+    },
+    {
+      "doc_path": "Chem Controller/index.md",
+      "doc_title": "Chem Controller Integration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:45:53+00:00",
+      "service": "Chem Controller/index.md"
+    },
+    {
+      "doc_path": "Customer Portal API/index.md",
+      "doc_title": "Customer Portal & API",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:04+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "MQTT Bridge/index.md",
+      "doc_title": "MQTT \u2192 PostgreSQL Bridge",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:22+00:00",
+      "service": "MQTT Bridge/index.md"
+    },
+    {
+      "doc_path": "Mosquitto/ACL-Pattern.md",
+      "doc_title": "ACL Pattern Reference",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:45+00:00",
+      "service": "mosquitto_broker-aqua1"
+    },
+    {
+      "doc_path": "Mosquitto/Users-Inventory.md",
+      "doc_title": "Users Inventory",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:47+00:00",
+      "service": "mosquitto_broker-aqua1"
+    },
+    {
+      "doc_path": "Mosquitto/index.md",
+      "doc_title": "Mosquitto MQTT Broker Cluster",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:00+00:00",
+      "service": "mosquitto_broker-aqua1"
+    },
+    {
+      "doc_path": "Networking/Inter-VLAN-Routing.md",
+      "doc_title": "Inter-VLAN Routing",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:43+00:00",
+      "service": "Networking/Inter-VLAN-Routing.md"
+    },
+    {
+      "doc_path": "Networking/index.md",
+      "doc_title": "AquaButler Networking",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:22+00:00",
+      "service": "Networking/index.md"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Builder-Remote-Images.md",
+      "doc_title": "OpenBalena Builder & Remote \u2014 Custom Registry Images",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:51+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Builder_Test.md",
+      "doc_title": "OpenBalena Builder Service Test",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:53+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Compose-Services.md",
+      "doc_title": "OpenBalena Fleet \u2014 Compose Services",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:46:58+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Device-Provisioning.md",
+      "doc_title": "OpenBalena Fleet \u2014 Device Provisioning Workflow",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:01+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Env-Vars.md",
+      "doc_title": "OpenBalena Fleet \u2014 Environment Variables Reference",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:06+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Traefik-Routing.md",
+      "doc_title": "OpenBalena Fleet \u2014 Traefik Routing Configuration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:09+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/Upstream-vs-Overlay.md",
+      "doc_title": "OpenBalena Fleet \u2014 Upstream vs. AquaButler Overlay",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:12+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena Fleet/index.md",
+      "doc_title": "OpenBalena Fleet \u2014 Device Management for Customer-Site Pool Controllers",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:26+00:00",
+      "service": "traefik-aqua_tunnel"
+    },
+    {
+      "doc_path": "Patroni/index.md",
+      "doc_title": "Patroni PostgreSQL Cluster",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:48+00:00",
+      "service": "Patroni/index.md"
+    },
+    {
+      "doc_path": "Pool Controller/AqualinkD Theme.md",
+      "doc_title": "AqualinkD Dashboard Theme",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:47:51+00:00",
+      "service": "Pool Controller/AqualinkD Theme.md"
+    },
+    {
+      "doc_path": "Pool Controller/Simulator Harness.md",
+      "doc_title": "Simulator Test Harness \u2014 AQB-013",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:48:03+00:00",
+      "service": "Pool Controller/Simulator Harness.md"
+    },
+    {
+      "doc_path": "Pool Controller/Vendor-Support.md",
+      "doc_title": "Pool Controller \u2014 Vendor Protocol Support",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:48:14+00:00",
+      "service": "Pool Controller/Vendor-Support.md"
+    },
+    {
+      "doc_path": "Pool Controller/index.md",
+      "doc_title": "Pool Controller \u2014 Customer-Site RS-485 Bus Master",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:48:25+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "Sequent HAT/index.md",
+      "doc_title": "Sequent HAT / REM Driver",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:48:31+00:00",
+      "service": "Sequent HAT/index.md"
+    },
+    {
+      "doc_path": "Supabase/Auth.md",
+      "doc_title": "Auth (GoTrue) \u2014 User Authentication & Session Management",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:05:47+00:00",
+      "service": "supabase_auth"
+    },
+    {
+      "doc_path": "Supabase/Edge-Functions.md",
+      "doc_title": "Edge Functions \u2014 supabase/edge-runtime",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:06:03+00:00",
+      "service": "supabase_functions"
+    },
+    {
+      "doc_path": "Supabase/Kong-Config.md",
+      "doc_title": "Supabase \u2014 Kong Declarative Configuration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:06:13+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Supabase/Realtime-Root-Cause.md",
+      "doc_title": "Supabase Realtime \u2014 Crash-Loop Root Cause (2026-08-20)",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:06:17+00:00",
+      "service": "supabase_realtime"
+    },
+    {
+      "doc_path": "Supabase/Services.md",
+      "doc_title": "Supabase \u2014 Per-Service Reference",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:49:21+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Supabase/Studio.md",
+      "doc_title": "Studio \u2014 Supabase Admin Dashboard (supabase/studio)",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:06:38+00:00",
+      "service": "supabase_studio"
+    },
+    {
+      "doc_path": "Supabase/imgproxy.md",
+      "doc_title": "Imgproxy \u2014 On-the-fly Image Transformation Proxy",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-26T14:49:41+00:00",
+      "service": "supabase_imgproxy"
+    },
+    {
+      "doc_path": "Supabase/index.md",
+      "doc_title": "Supabase \u2014 Self-Hosted Stack on Aqua Swarm",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:07:23+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "index.md",
+      "doc_title": "AquaButler Infrastructure",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:07:44+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Aqua%20Swarm/index.md",
+      "doc_title": "Aqua Docker Swarm",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:00:58+00:00",
+      "service": "Aqua%20Swarm/index.md"
+    },
+    {
+      "doc_path": "Aqua%20Traefik/index.md",
+      "doc_title": "Aqua Traefik & Cloudflared Tunnel",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:01:12+00:00",
+      "service": "traefik-aqua_proxy"
+    },
+    {
+      "doc_path": "Aqua_Swarm/Storage.md",
+      "doc_title": "Aqua Swarm \u2014 Storage Architecture",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:01:18+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Aqua_Swarm/index.md",
+      "doc_title": "Aqua Docker Swarm",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:01:43+00:00",
+      "service": "Aqua_Swarm/index.md"
+    },
+    {
+      "doc_path": "Aqua_Swarm/runtime-audit-2026-07-29.md",
+      "doc_title": "Aqua Swarm Runtime Audit \u2014 2026-07-29",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:01+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Aqua_Swarm.md",
+      "doc_title": "Aqua Swarm \u2014 Docker Swarm for AquaButler Cloud Services",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:06+00:00",
+      "service": "Aqua_Swarm.md"
+    },
+    {
+      "doc_path": "Architecture.md",
+      "doc_title": "AquaButler \u2014 System Architecture",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:09+00:00",
+      "service": "Architecture.md"
+    },
+    {
+      "doc_path": "Chem_Controller/index.md",
+      "doc_title": "Chem Controller Integration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:14+00:00",
+      "service": "Chem_Controller/index.md"
+    },
+    {
+      "doc_path": "Customer%20Portal%20API/index.md",
+      "doc_title": "Customer Portal & API",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:26+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Customer_Portal/index.md",
+      "doc_title": "Customer Portal & API",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:33+00:00",
+      "service": "Customer_Portal/index.md"
+    },
+    {
+      "doc_path": "Deployment.md",
+      "doc_title": "AquaButler \u2014 Deployment",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:34+00:00",
+      "service": "Deployment.md"
+    },
+    {
+      "doc_path": "Directives/Reuse-First.md",
+      "doc_title": "Reuse-First",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:36+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "MQTT_to_PostgreSQL_Bridge.md",
+      "doc_title": "MQTT-to-PostgreSQL Bridge",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:02:43+00:00",
+      "service": "MQTT_to_PostgreSQL_Bridge.md"
+    },
+    {
+      "doc_path": "Mosquitto MQTT Cluster/ACL-Pattern.md",
+      "doc_title": "ACL Pattern Reference",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:02+00:00",
+      "service": "mosquitto_broker-aqua1"
+    },
+    {
+      "doc_path": "Mosquitto MQTT Cluster/MQTT Cluster.md",
+      "doc_title": "Mosquitto MQTT Cluster \u2014 Aqua Swarm",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:10+00:00",
+      "service": "mosquitto_broker-aqua1"
+    },
+    {
+      "doc_path": "Networking/Cloudflare-Tunnel.md",
+      "doc_title": "Cloudflare Tunnel",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:13+00:00",
+      "service": "traefik-aqua_proxy"
+    },
+    {
+      "doc_path": "Networking/DNS-Across-VLANs.md",
+      "doc_title": "DNS Across VLANs",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:17+00:00",
+      "service": "Networking/DNS-Across-VLANs.md"
+    },
+    {
+      "doc_path": "Networking/Firewall-Policy-Allow-Aqua-To-Postgres.md",
+      "doc_title": "UniFi Firewall Policy \u2014 Allow Aqua to Postgres",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:18+00:00",
+      "service": "Networking/Firewall-Policy-Allow-Aqua-To-Postgres.md"
+    },
+    {
+      "doc_path": "Networking/Overlay-Networks.md",
+      "doc_title": "Overlay Networks",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:21+00:00",
+      "service": "Networking/Overlay-Networks.md"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/Builder-Remote-Images.md",
+      "doc_title": "Builder & Remote Images \u2014 Custom OpenBalena Registry Images",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:26+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/Builder_Test.md",
+      "doc_title": "OpenBalena Builder Service Test",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:27+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/Patroni-Verification-2026-08-25.md",
+      "doc_title": "Patroni Verification \u2014 OpenBalena Phase 1 (2026-08-25)",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:31+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/Registry_Integration.md",
+      "doc_title": "OpenBalena Registry Integration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:35+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/Upstream-vs-Overlay.md",
+      "doc_title": "OpenBalena Fleet \u2014 Upstream vs. AquaButler Overlay",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:03:39+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena%20Fleet/index.md",
+      "doc_title": "OpenBalena Fleet \u2014 Device Management for Customer-Site Pool Controllers",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:00+00:00",
+      "service": "traefik-aqua_tunnel"
+    },
+    {
+      "doc_path": "OpenBalena_Fleet/Builder-Remote-Images.md",
+      "doc_title": "open-balena-builder & open-balena-remote \u2014 Custom Registry Images",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:05+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena_Fleet/Builder_Test.md",
+      "doc_title": "OpenBalena Builder Service Test",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:08+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena_Fleet/Registry_Integration.md",
+      "doc_title": "OpenBalena Registry Integration",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:12+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "OpenBalena_Fleet/index.md",
+      "doc_title": "OpenBalena Fleet \u2014 Device Management for Customer-Site Pool Controllers",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:27+00:00",
+      "service": "traefik-aqua_tunnel"
+    },
+    {
+      "doc_path": "OpenBalena_Fleet.md",
+      "doc_title": "OpenBalena Fleet Management",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:32+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "Patroni_PostgreSQL_Cluster.md",
+      "doc_title": "Patroni PostgreSQL Cluster",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:04:55+00:00",
+      "service": "Patroni_PostgreSQL_Cluster.md"
+    },
+    {
+      "doc_path": "Pool%20Controller/Vendor-Support.md",
+      "doc_title": "Pool Controller \u2014 Vendor Protocol Support",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:05:12+00:00",
+      "service": "Pool%20Controller/Vendor-Support.md"
+    },
+    {
+      "doc_path": "Pool%20Controller/index.md",
+      "doc_title": "Pool Controller \u2014 Customer-Site RS-485 Bus Master",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:05:26+00:00",
+      "service": "openbalena_admin-postgrest"
+    },
+    {
+      "doc_path": "Sequent_HAT/index.md",
+      "doc_title": "Sequent HAT / REM Driver",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:05:29+00:00",
+      "service": "Sequent_HAT/index.md"
+    },
+    {
+      "doc_path": "Supabase/Realtime.md",
+      "doc_title": "Supabase Realtime \u2014 Cycling Pattern Investigation",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:06:22+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "doc_title": "Supabase Stack",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:07:35+00:00",
+      "service": "supabase_analytics"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "doc_title": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:07:45+00:00",
+      "service": "njsPC_Merge.md"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "doc_title": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "last_compose_change": "",
+      "oldest_doc_indexed_at": "2026-08-27T07:07:40+00:00",
+      "service": "supabase_analytics"
+    }
+  ],
+  "doc_vs_running": [
+    {
+      "documented": true,
+      "running": false,
+      "service": "Alerting/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua Swarm/Storage.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua Swarm/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua Swarm/runtime-audit-2026-07-29.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua Traefik/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua%20Swarm/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua%20Traefik/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua_Swarm.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua_Swarm/Storage.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua_Swarm/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Aqua_Swarm/runtime-audit-2026-07-29.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Architecture.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Chem Controller/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Chem_Controller/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Customer Portal API/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Customer%20Portal%20API/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Customer_Portal/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Deployment.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Directives/Reuse-First.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "MQTT Bridge/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "MQTT_to_PostgreSQL_Bridge.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/Cloudflare-Tunnel.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/DNS-Across-VLANs.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/Firewall-Policy-Allow-Aqua-To-Postgres.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/Inter-VLAN-Routing.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/Overlay-Networks.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Networking/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Patroni/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Patroni_PostgreSQL_Cluster.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool Controller/AqualinkD Theme.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool Controller/Simulator Harness.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool Controller/Vendor-Support.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool Controller/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool%20Controller/Vendor-Support.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Pool%20Controller/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Sequent HAT/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "Sequent_HAT/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "aqua_cortex/index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "index.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": false,
+      "service": "njsPC_Merge.md",
+      "stack": "",
+      "swarm_state": ""
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "mosquitto_broker-aqua1",
+      "stack": "mosquitto",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_admin-postgrest",
+      "stack": "openbalena",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_api",
+      "stack": "openbalena",
+      "swarm_state": "0/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_builder",
+      "stack": "openbalena",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_docker-host",
+      "stack": "openbalena",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_helper",
+      "stack": "openbalena",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "openbalena_remote",
+      "stack": "openbalena",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_analytics",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_auth",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_functions",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_imgproxy",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_kong",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_meta",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_realtime",
+      "stack": "supabase",
+      "swarm_state": "0/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_storage",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "supabase_studio",
+      "stack": "supabase",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "traefik-aqua_proxy",
+      "stack": "traefik-aqua",
+      "swarm_state": "1/1"
+    },
+    {
+      "documented": true,
+      "running": true,
+      "service": "traefik-aqua_tunnel",
+      "stack": "traefik-aqua",
+      "swarm_state": "1/1"
+    }
+  ],
+  "generated_at": "2026-08-28T02:30:57+00:00",
+  "index": "aqua_cortex",
+  "recent_activity": [
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "njsPC_Merge.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "njsPC v8.0.1 \u2192 v9.1.0 Upstream Merge Plan",
+      "when": "2026-08-27T07:07:45+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "mosquitto_broker-aqua1",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "openbalena_admin-postgrest",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "mosquitto_broker-aqua1",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "mosquitto_broker-aqua1",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "AquaButler Infrastructure",
+      "when": "2026-08-27T07:07:44+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "aqua_cortex/index.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "aqua_cortex \u2014 Obsidian RAG Indexer",
+      "when": "2026-08-27T07:07:40+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    },
+    {
+      "doc_path": "Supabase_Stack.md",
+      "service": "supabase_analytics",
+      "source": "obsidian",
+      "summary": "Supabase Stack",
+      "when": "2026-08-27T07:07:35+00:00"
+    }
+  ]
+}

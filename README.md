@@ -193,6 +193,87 @@ and the server treats the absent field as "don't touch".
   `docker --context aqua-swarm service ls | grep supabase_storage`)
   AND `linked_cards` populated with `t_<hex>` ids.
 
+## Phase 3 — User-facing surface
+
+Phase 3 ships two complementary surfaces on top of the Phase 2 joined index.
+Both ship as part of this repo; neither deploys a new service.
+
+### Lane A — Grafana panel (`patroni-monitoring_grafana`)
+
+Extends the existing home-swarm Grafana service. The panel JSON lives at
+`grafana/aqua_cortex_panel.json` and ships three table sub-panels:
+
+| Sub-panel | Source field(s) | What it shows |
+|-----------|-----------------|---------------|
+| **Doc vs Running** | `linked_services`, `live_state` | Each service's documented / running flags + swarm state |
+| **Doc Freshness** | `indexed_at`, git last-modified | Days since a doc was re-indexed; cells > 30 days go red |
+| **Recent Activity** | `indexed_at`, `source`, `doc_title` | Last 50 indexed chunks, newest first |
+
+The panel reads from the cortex snapshot — a flat JSON blob that lives at
+`grafana/aqua_cortex_snapshot.example.json` (committed reference) or is
+regenerated live via `hermes aqua-cortex snapshot`. See
+[`deploy/grafana-import-notes.md`](deploy/grafana-import-notes.md) for
+the import recipe.
+
+### Lane B — `hermes aqua-cortex` CLI
+
+Terminal surface for fast lookup. Drop
+[`hermes-plugin/hermes_aqua_cortex.py`](hermes-plugin/hermes_aqua_cortex.py)
+on `$PATH` (e.g. `~/.local/bin/hermes-aqua-cortex`) and the `hermes`
+CLI auto-discovers it as `hermes aqua-cortex`. Three subcommands:
+
+| Subcommand | Purpose |
+|------------|---------|
+| `hermes aqua-cortex query "<question>"` | Hybrid-search the joined index, prompt the existing llama.cpp server, print a citation-bearing answer |
+| `hermes aqua-cortex snapshot` | Emit the same JSON blob the Grafana panel reads (useful for the cron-driven import path) |
+| `hermes aqua-cortex ping` | Sanity-check Meilisearch + llama.cpp reachability |
+
+The `query` subcommand:
+
+1. Hybrid-searches `https://meili.loc.wallacearizona.us/indexes/aqua_cortex/search`
+   with lexical `q` + dense `vector` (both from the same question).
+2. Sends the top 5 chunks (configurable via `HERMES_AQUA_CORTEX_TOP_K`) to
+   the existing `https://llama.loc.wallacearizona.us/v1/chat/completions`
+   with a "answer using ONLY the cited chunks" system prompt.
+3. Parses citations out of chunk metadata deterministically — the LLM
+   cannot inject fake sources.
+4. Falls back to an extractive answer when the LLM goes degenerate
+   (Qwen2.5-1.5B occasionally loops); the Sources block is always emitted.
+
+Sample output:
+
+```
+$ hermes aqua-cortex query "what is the mosquitto cluster topology"
+Top matching context (LLM output was untrustworthy; using extractive fallback):
+
+[Mosquitto — MQTT Topic Hierarchy] ...
+
+Sources:
+  - Mosquitto/index.md#-mqtt-topic-hierarchy
+  - kanban:t_6823b7e9
+  - swarm:mosquitto_broker-aqua1=1/1
+```
+
+Configuration is read from the same `aqua_cortex.toml` the indexer and
+linker use, so a single edit covers all three surfaces. Per-call env
+overrides are documented in
+[`hermes-plugin/README.md`](hermes-plugin/README.md).
+
+### Phase 3 acceptance (verified 2026-08-28)
+
+- `tests/test_panel_json.py` — 9 tests pass: validates the Grafana export
+  shape (`schemaVersion`, `__inputs`, `__requires`, ≥3 table panels,
+  correct datasource UID on every panel).
+- `tests/test_cli_smoke.py` — 3 tests pass against fake Meilisearch +
+  fake llama.cpp on free localhost ports (offline / no live state).
+- `hermes aqua-cortex ping` against the live home swarm — `meili : OK
+  (2061 docs)`, `llama : OK (dim=1536)`.
+- `hermes aqua-cortex query "what is the mosquitto cluster topology"`
+  exits 0, prints answer text, prints ≥1 source citation (a doc path,
+  a `kanban:t_<hex>` line, and a `swarm:<svc>=<state>` line).
+
+---
+
 ## Embedding model — honest note
 
 The home-swarm llama.cpp server runs
